@@ -37,5 +37,27 @@ def create_aftale(aftale_id, cpr, nummerplade, aftale_type, start_dato, slut_dat
 
         if row is None:
             return None
-        return {'aftale_id': row[0], 'cpr': row[1], 'nummerplade': row[2], 
-                'aftale_type': row[3], 'start_dato': row[4], 'slut_dato': row[5]}
+        return {'aftale_id': row[0], 
+                'cpr': row[1], 
+                'nummerplade': row[2], 
+                'aftale_type': row[3], 
+                'start_dato': row[4], 
+                'slut_dato': row[5]}
+
+def get_aftaler():
+    with sqlite3.connect(db_path) as con:
+        cur = con.cursor()
+        cur.execute('SELECT * FROM aftaler')
+        rows = cur.fetchall()
+
+        all_aftaler = [{'aftale_id': row[0], 
+                        'cpr': row[1], 
+                        'nummerplade': row[2], 
+                        'aftale_type': row[3], 
+                        'start_dato': row[4], 
+                        'slut_dato': row[5]}
+                        for row in rows]
+        if len(all_aftaler) == 0:
+            return None
+
+        return all_aftaler

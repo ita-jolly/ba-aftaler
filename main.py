@@ -81,6 +81,16 @@ def create_aftale():
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
 
 
+@app.route('/aftaler', methods=['GET'])
+def get_aftaler():
+    aftaler = db_service.get_aftaler()
+
+    if aftaler is None:
+        response = make_response({'message': 'Ingen aftaler fundet'}, 404)
+    else:
+        response = make_response(aftaler, 200)
+
+    return response
 
 # @app.route('/gettemplate', methods=['GET']) 
 # @swag_from('swagger/get_template.yml') 
