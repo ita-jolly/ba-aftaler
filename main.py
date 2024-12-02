@@ -13,6 +13,7 @@ swagger = Swagger(app, config=swagger_config)
 
 # URL of the "biler" microservice
 BILER_SERVICE_URL = os.getenv('BILER_SERVICE_URL')
+KUNDER_SERVICE_URL = os.getenv('KUNDER_SERVICE_URL')
 
 
 db_service.init() 
@@ -34,7 +35,7 @@ def create_aftale():
         if not all(field in data for field in required_fields):
             return jsonify({"error": "Missing required fields"}), 400
         
-         # Check if the nummerplade is available in the biler microservice
+        # Check if the nummerplade is available in the biler microservice
         nummerplade = data['nummerplade']
         response = requests.get(f"{BILER_SERVICE_URL}/biler")
         if response.status_code != 200:
@@ -50,6 +51,17 @@ def create_aftale():
         # Check if udlejnings_status is True (car is not available for rental)
         if matching_bil['udlejnings_status']:
             return jsonify({"error": f"Nummerplade {nummerplade} is not available for rental"}), 400
+        
+        # Check if the cpr is available in the kunder microservice
+        cpr = data['cpr']
+        response = requests.get(f"{KUNDER_SERVICE_URL}/kunder")
+        kunder = response.json()
+        if kunder is None:
+            return jsonify({"error": "Could not communicate with the kunder database"}), 500
+
+        matching_kunde = next((kunde for kunde in kunder if kunde['cpr'] == cpr), None)
+        if not matching_kunde:
+            return jsonify({"error": f"Cpr {cpr} does not exists in kunder database"}), 400
 
         # Call the db_service to insert a new aftale
         result = db_service.create_aftale(

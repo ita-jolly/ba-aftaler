@@ -13,7 +13,7 @@ def init():
         cur = con.cursor()
         cur.execute('''CREATE TABLE IF NOT EXISTS aftaler(
                     aftale_id INTEGER PRIMARY KEY,
-                    cpr INTEGER,
+                    cpr TEXT,
                     nummerplade TEXT,
                     aftale_type TEXT,
                     start_dato DATE,
