@@ -24,6 +24,7 @@ def index():
 
 
 @app.route('/aftaler', methods=['POST'])
+@swag_from('swagger/create_aftale.yml')
 def create_aftale():
     """Endpoint to create a new aftale."""
     try:
@@ -93,6 +94,7 @@ def create_aftale():
 
 
 @app.route('/aftaler', methods=['GET'])
+@swag_from('swagger/get_aftaler.yml')
 def get_aftaler():
     aftaler = db_service.get_aftaler()
 

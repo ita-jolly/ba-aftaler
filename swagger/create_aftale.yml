@@ -1,0 +1,85 @@
+tags:
+  - aftaler
+summary: Create a new aftale.
+description: Creates a new aftale in the database after validating data with external microservices. Nummerplade and CPR should exist in the biler and kunder databases respectively.
+parameters:
+  - in: body
+    description: JSON object containing the aftale details.
+    required: true
+    schema:
+      type: object
+      properties:
+        cpr:
+          type: string
+          example: "1203567890"
+        nummerplade:
+          type: string
+          example: "AB12345"
+        aftale_type:
+          type: string
+          example: "short-term"
+        start_dato:
+          type: string
+          format: date
+          example: "2023-12-01"
+        slut_dato:
+          type: string
+          format: date
+          example: "2023-12-10"
+
+responses:
+  201:
+    description: Aftale created successfully.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Aftale created successfully!"
+        aftale:
+          type: object
+          properties:
+            aftale_id:
+              type: integer
+              example: 1
+            cpr:
+              type: string
+              example: "1234567890"
+            nummerplade:
+              type: string
+              example: "AB12345"
+            aftale_type:
+              type: string
+              example: "short-term"
+            start_dato:
+              type: string
+              format: date
+              example: "2023-12-01"
+            slut_dato:
+              type: string
+              format: date
+              example: "2023-12-10"
+  400:
+    description: Missing required fields or invalid data.
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Missing required fields"
+  404:
+    description: Nummerplade not found or cpr not found.
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Nummerplade AB12345 not found in biler database"
+  500:
+    description: Unexpected error occurred.
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "An unexpected error occurred"
