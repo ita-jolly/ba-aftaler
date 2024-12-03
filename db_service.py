@@ -25,11 +25,12 @@ def init():
 def create_aftale(cpr, nummerplade, aftale_type, start_dato, slut_dato):
     with sqlite3.connect(db_path) as con:
         cur = con.cursor()
-        cur.execute(
-            'INSERT INTO aftaler  cpr, nummerplade, aftale_type, start_dato, slut_dato) '
-            'VALUES (?, ?, ?, ?, ?)',
+        cur.execute('''
+            INSERT INTO aftaler (cpr, nummerplade, aftale_type, start_dato, slut_dato)
+            VALUES (?, ?, ?, ?, ?)''',
             (cpr, nummerplade, aftale_type, start_dato, slut_dato)
-        )
+            )
+
         con.commit()
 
         cur.execute('SELECT * FROM aftaler')
