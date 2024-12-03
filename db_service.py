@@ -12,7 +12,7 @@ def init():
     with sqlite3.connect(db_path) as con:
         cur = con.cursor()
         cur.execute('''CREATE TABLE IF NOT EXISTS aftaler(
-                    aftale_id INTEGER PRIMARY KEY,
+                    aftale_id INTEGER PRIMARY KEY AUTOINCREMENT,
                     cpr TEXT,
                     nummerplade TEXT,
                     aftale_type TEXT,
@@ -22,26 +22,28 @@ def init():
 
         con.commit()
 
-def create_aftale(aftale_id, cpr, nummerplade, aftale_type, start_dato, slut_dato):
+def create_aftale(cpr, nummerplade, aftale_type, start_dato, slut_dato):
     with sqlite3.connect(db_path) as con:
         cur = con.cursor()
-        cur.execute(
-            'INSERT INTO aftaler (aftale_id, cpr, nummerplade, aftale_type, start_dato, slut_dato) '
-            'VALUES (?, ?, ?, ?, ?, ?)',
-            (aftale_id, cpr, nummerplade, aftale_type, start_dato, slut_dato)
-        )
+        cur.execute('''
+            INSERT INTO aftaler (cpr, nummerplade, aftale_type, start_dato, slut_dato)
+            VALUES (?, ?, ?, ?, ?)''',
+            (cpr, nummerplade, aftale_type, start_dato, slut_dato)
+            )
+
         con.commit()
 
-        cur.execute('SELECT * FROM aftaler WHERE aftale_id = ?', (aftale_id,))
+        cur.execute('SELECT * FROM aftaler')
         row = cur.fetchone()
 
         if row is None:
             return None
-        return {'aftale_id': row[0], 
-                'cpr': row[1], 
-                'nummerplade': row[2], 
-                'aftale_type': row[3], 
-                'start_dato': row[4], 
+
+        return {'aftale_id': row[0],
+                'cpr': row[1],
+                'nummerplade': row[2],
+                'aftale_type': row[3],
+                'start_dato': row[4],
                 'slut_dato': row[5]}
 
 def get_aftaler():
@@ -50,11 +52,11 @@ def get_aftaler():
         cur.execute('SELECT * FROM aftaler')
         rows = cur.fetchall()
 
-        all_aftaler = [{'aftale_id': row[0], 
-                        'cpr': row[1], 
-                        'nummerplade': row[2], 
-                        'aftale_type': row[3], 
-                        'start_dato': row[4], 
+        all_aftaler = [{'aftale_id': row[0],
+                        'cpr': row[1],
+                        'nummerplade': row[2],
+                        'aftale_type': row[3],
+                        'start_dato': row[4],
                         'slut_dato': row[5]}
                         for row in rows]
         if len(all_aftaler) == 0:

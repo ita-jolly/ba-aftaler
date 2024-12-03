@@ -1,0 +1,40 @@
+tags:
+  - aftaler
+summary: Get all aftaler.
+description: Retrieves a list of all aftaler stored in the database.
+responses:
+  200:
+    description: List of aftaler.
+    schema:
+      type: array
+      items:
+        type: object
+        properties:
+          aftale_id:
+            type: integer
+            example: 1
+          cpr:
+            type: string
+            example: "1234567890"
+          nummerplade:
+            type: string
+            example: "AB12345"
+          aftale_type:
+            type: string
+            example: "short-term"
+          start_dato:
+            type: string
+            format: date
+            example: "2023-12-01"
+          slut_dato:
+            type: string
+            format: date
+            example: "2023-12-10"
+  404:
+    description: No aftaler found.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Ingen aftaler fundet"
