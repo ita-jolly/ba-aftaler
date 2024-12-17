@@ -20,7 +20,27 @@ db_service.init()
 
 @app.route('/', methods=['GET'])
 def index():
-    return "Welcome to API"
+    endpoints = [
+        {
+            "path": "/apidocs",
+            "method": "GET",
+            "description": "Endpoint documentation"
+        },
+        {
+            "path": "/aftaler",
+            "method": "POST",
+            "description": "Create a new aftale"
+        },
+        {
+            "path": "/aftaler",
+            "method": "GET",
+            "description": "Get all aftaler"
+        }
+    ]
+    return jsonify({
+        "Service": "ba-biler Microservice",
+        "Available endpoints": endpoints
+    })
 
 
 @app.route('/aftaler', methods=['POST'])
