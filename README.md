@@ -24,7 +24,8 @@ The microservice requires the following environmental variables to be configured
 
 | **Path**       | **Method** | **Description** | **Status Codes**  | **Response** |
 |------------|------------|--------------------|---------------|---------------------|
-| `/aftaler`     | GET        | Retrieves a list of all aftaler stored in the database. | 200, 404  | **200**: Array of aftaler objects (each with `aftale_id`, `cpr`, `nummerplade`, `aftale_type`, `start_dato`, and `slut_dato`). <br> **404**: `{"message": "Ingen aftaler fundet"}` | | `/aftaler`     | POST       | Creates a new aftale in the database after validating data with external microservices. | 201, 400, 404, 409, 500  | **201**: `{"message": "Aftale created successfully!", "aftale": { ... }}` <br> **400**: `{"error": "Missing required fields"}` or `{"error": "Nummerplade is not available for rental"}` <br> **404**: `{"error": "Nummerplade not found"}` <br> **500**: `{"error": "Unexpected error occurred"}`            |
+| `/aftaler`     | GET        | Retrieves a list of all aftaler stored in the database. | 200, 404  | Array of objects each containing `aftale_id`, `cpr`, `nummerplade`, `aftale_type`, `start_dato` and `slut_dato` or error message explaining failure. |
+| `/aftaler`     | POST       | Creates a new aftale in the database after validating data with external microservices. | 201, 400, 404, 409, 500  | Object containing `aftale_id`, `cpr`, `nummerplade`, `aftale_type`, `start_dato` and `slut_dato` or error message explaining failure. |
 
 ---
 
